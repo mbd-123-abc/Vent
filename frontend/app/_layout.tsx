@@ -1,24 +1,40 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+//Mahika Bagri
+//26 March 2026
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { useEffect } from 'react';
+import { useAuthStore } from '../store/authStore';
+import type { AuthState } from '../store/authStore';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+const PUBLIC_ROUTES = ['index', 'login', 'register'];
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const loadToken = useAuthStore((s: AuthState) => s.loadToken);
+  const token = useAuthStore((s: AuthState) => s.token);
+  const hydrated = useAuthStore((s: AuthState) => s.hydrated);
+  const router = useRouter();
+  const segments = useSegments();
+
+  useEffect(() => {
+    loadToken();
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const currentRoute = segments[0] ?? 'index';
+    const isPublic = PUBLIC_ROUTES.includes(currentRoute);
+    if (!token && !isPublic) {
+      router.replace('/login');
+    }
+  }, [token, hydrated, segments]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="login" />
+      <Stack.Screen name="register" />
+      <Stack.Screen name="dashboard" />
+      <Stack.Screen name="profile" />
+    </Stack>
   );
 }
