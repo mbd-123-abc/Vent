@@ -1,4 +1,7 @@
-package com.example.backend;
+//Mahika Bagri 
+//30 March 2026
+
+package com.example.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
