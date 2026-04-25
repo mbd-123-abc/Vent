@@ -1,5 +1,5 @@
 //Mahika Bagri 
-//30 March 2026
+//19 April 2026
 
 package com.example.app.repositories;
 import com.example.app.models.user;
@@ -11,5 +11,6 @@ import java.util.Optional;
 
 public interface userRepository extends CrudRepository<user,Long>{
     Optional<user> findByEmail(String email);
+    Optional<user> findByUsername(String username);
     Optional<user> findByVerificationCode(String verificationCode);
 }

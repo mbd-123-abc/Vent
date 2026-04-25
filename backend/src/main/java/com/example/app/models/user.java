@@ -1,7 +1,9 @@
 //Mahika Bagri 
-//30 March 2026
+//20 April 2026
 
 package com.example.app.models;
+import java.time.LocalDateTime;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
@@ -14,14 +16,14 @@ import lombok.Setter;
 
 
 @Entity
-@Table(name = "auth")
+@Table(name = "user_auth")
 @Getter
 @Setter
 
 public class user implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id; 
+    private Long id; 
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -32,13 +34,23 @@ public class user implements UserDetails{
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    @Column(name = "verification_expiration")
+    private LocalDateTime verificationCodeExpiresAt;
+
     @Column(name = "verified")
     private boolean verified;
 
     @Column(name = "banned")
     private boolean banned;
 
-    public user(String username, String email, String password){
+    public user(String name, String username, String email, String password){
+        this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;

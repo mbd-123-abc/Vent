@@ -1,5 +1,5 @@
 //Mahika Bagri 
-//30 March 2026
+//9 April 2026
 
 plugins {
     java
@@ -26,7 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-
+    implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
@@ -34,8 +34,8 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
-    runtimeOnly("org.postgresql:postgresql") // production
-    runtimeOnly("com.h2database:h2")         // dev / tests
+    runtimeOnly("org.postgresql:postgresql") 
+    runtimeOnly("com.h2database:h2")       
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
