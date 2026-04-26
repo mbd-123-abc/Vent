@@ -17,6 +17,7 @@ function parseUsername(token: string): string | null {
 export interface AuthState {
   token: string | null;
   username: string | null;
+  email: string | null;
   hydrated: boolean;
   error: string | null;
   setToken: (token: AuthToken) => Promise<void>;
@@ -29,12 +30,13 @@ export interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   token: null,
   username: null,
+  email:null,
   hydrated: false,
   error: null,
 
   setToken: async (auth: AuthToken) => {
     await AsyncStorage.setItem('access_token', auth.access_token);
-    set({ token: auth.access_token, username: parseUsername(auth.access_token) });
+    set({ token: auth.access_token, username: parseUsername(auth.access_token), email:null});
   },
 
   clearToken: async () => {
@@ -50,4 +52,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearError: () => set({ error: null }),
 
   setError: (msg: string) => set({ error: msg }),
+
+  setEmail: (email: string) => set({ email: email }),
 }));

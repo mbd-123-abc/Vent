@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
+  Text, TextInput, TouchableOpacity, StyleSheet,
   KeyboardAvoidingView, Platform, ActivityIndicator,
   ImageBackground,
 } from 'react-native';
@@ -68,7 +68,7 @@ export default function RegisterScreen() {
     } finally {
       setLoading(false);
     }
-    if (success) router.replace('/verification');
+    if (success) setEmail(email); router.push('/verification');
   };
 
   return (
