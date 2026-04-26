@@ -1,5 +1,5 @@
 //Mahika Bagri
-//28 March 2026
+//25 April 2026
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -15,7 +15,6 @@ import type { AuthState } from '../store/authStore';
 
 export default function RegisterScreen() {
     const router = useRouter();
-    const setToken   = useAuthStore((s: AuthState) => s.setToken);
     const error      = useAuthStore((s: AuthState) => s.error);
     const clearError = useAuthStore((s: AuthState) => s.clearError);
     const setError   = useAuthStore((s: AuthState) => s.setError);
@@ -47,7 +46,7 @@ export default function RegisterScreen() {
     setLoading(true);
     let success = false;
     try {
-      const { data } = await api.post('/auth/register', {name, email, username, password});
+      const { data } = await api.post('/auth/signup', {name, email, username, password});
       success = true;
     } catch (err: any) {
       console.error('Raw Register Error:', err.message);
@@ -69,7 +68,7 @@ export default function RegisterScreen() {
     } finally {
       setLoading(false);
     }
-    if (success) router.replace('/dashboard');
+    if (success) router.replace('/verification');
   };
 
   return (
