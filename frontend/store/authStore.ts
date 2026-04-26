@@ -25,6 +25,7 @@ export interface AuthState {
   loadToken: () => Promise<void>;
   clearError: () => void;
   setError: (msg: string) => void;
+  setEmail: (email: string) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -53,5 +54,5 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setError: (msg: string) => set({ error: msg }),
 
-  setEmail: (email: string) => set({ email: email }),
+  setEmail: (email: string) => set({ email: email })
 }));

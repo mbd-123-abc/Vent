@@ -26,6 +26,7 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const setEmailAuth = useAuthStore((state) => state.setEmail);
 
   useEffect(() => { clearError(); }, []);
 
@@ -68,7 +69,8 @@ export default function RegisterScreen() {
     } finally {
       setLoading(false);
     }
-    if (success) setEmail(email); router.push('/verification');
+    if (success) setEmailAuth(email); 
+    if(success) router.push('/verification');
   };
 
   return (
@@ -88,7 +90,6 @@ export default function RegisterScreen() {
             placeholderTextColor="#666"
             value={name}
             onChangeText={t => { setName(t); clearError(); setFieldErrors(p => ({ ...p, name: '' })); }}
-            secureTextEntry
         />
         {fieldErrors.name ? <Text style={styles.fieldError}>{fieldErrors.name}</Text> : null}
 
@@ -98,7 +99,6 @@ export default function RegisterScreen() {
             placeholderTextColor="#666"
             value={email}
             onChangeText={t => { setEmail(t); clearError(); setFieldErrors(p => ({ ...p, email: '' })); }}
-            secureTextEntry
         />
         {fieldErrors.email ? <Text style={styles.fieldError}>{fieldErrors.email}</Text> : null}
 

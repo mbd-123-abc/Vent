@@ -15,12 +15,13 @@ import type { AuthState } from '../store/authStore';
 
 export default function VerificationScreen(){
         const email = useAuthStore((state) => state.email);
-        if (!email) return null;
-
         const router = useRouter();
         useEffect(() => {
             if (!email) {
-                setTimeout(() => router.replace('/register'), 0);
+                const timer = setTimeout(() => {
+                    router.replace('/register');
+                }, 1);
+                return () => clearTimeout(timer);
             }
         }, [email]);
 
@@ -48,8 +49,8 @@ export default function VerificationScreen(){
             const { data } = await api.post('/auth/resend', {email,code});
             success = true;
         } catch (err: any){
-            console.error('Raw Register Error:', err.message);
-            console.error('Register Response:', err.response?.status, JSON.stringify(err.response?.data));
+            console.error('Raw Verification Error:', err.message);
+            console.error('Verification Response:', err.response?.status, JSON.stringify(err.response?.data));
             const rawDetail = err.response?.data?.detail;
             const detail = Array.isArray(rawDetail)
                 ? (rawDetail[0]?.msg ?? 'Validation error')
@@ -72,8 +73,8 @@ export default function VerificationScreen(){
             const { data } = await api.post('/auth/verify', {email,code});
             success = true;
         } catch (err: any){
-            console.error('Raw Register Error:', err.message);
-            console.error('Register Response:', err.response?.status, JSON.stringify(err.response?.data));
+            console.error('Raw Verification Error:', err.message);
+            console.error('Verification Response:', err.response?.status, JSON.stringify(err.response?.data));
             const rawDetail = err.response?.data?.detail;
             const detail = Array.isArray(rawDetail)
                 ? (rawDetail[0]?.msg ?? 'Validation error')
@@ -107,7 +108,7 @@ export default function VerificationScreen(){
                     />
 {error &&           <Text style={styles.errorBox}>{error}</Text>}
                     <TouchableOpacity style={styles.btn} onPress={handleCode} disabled={loading} accessibilityRole="button">
-                        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>Create Account</Text>}
+                        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>Verify</Text>}
                     </TouchableOpacity>
 
             <TouchableOpacity onPress={handleResend} accessibilityRole="button">
