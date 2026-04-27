@@ -18,6 +18,7 @@ export default function RegisterScreen() {
     const error      = useAuthStore((s: AuthState) => s.error);
     const clearError = useAuthStore((s: AuthState) => s.clearError);
     const setError   = useAuthStore((s: AuthState) => s.setError);
+    const setEmailAuth = useAuthStore((s: AuthState) => s.setEmail);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -26,7 +27,6 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const setEmailAuth = useAuthStore((state) => state.setEmail);
 
   useEffect(() => { clearError(); }, []);
 

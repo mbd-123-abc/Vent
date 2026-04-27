@@ -19,6 +19,7 @@ export default function LoginScreen() {
   const error     = useAuthStore((s: AuthState) => s.error);
   const clearError = useAuthStore((s: AuthState) => s.clearError);
   const setError  = useAuthStore((s: AuthState) => s.setError);
+  const setUsernameAuth = useAuthStore((s: AuthState) => s.setUsername);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -36,7 +37,8 @@ export default function LoginScreen() {
     let success = false;
     try {
       const response = await api.post('/auth/login', { username, password });
-      await setToken({ access_token: response.data.access_token, token_type: 'bearer', expires_in: response.data.expires_in ?? 86400 });
+      setUsernameAuth(username); 
+      await setToken({ access_token: response.data.token, token_type: 'bearer', expires_in: response.data.expires_in ?? 86400 });
       success = true;
     } catch (err: any) {
       console.error('Raw Auth Error:', err.message);
@@ -52,7 +54,7 @@ export default function LoginScreen() {
     } finally {
       setLoading(false);
     }
-    if (success) router.replace('/dashboard');
+    if(success) router.push('/dashboard');
   };
 
   return (

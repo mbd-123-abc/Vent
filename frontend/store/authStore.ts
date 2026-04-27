@@ -1,18 +1,9 @@
 //Mahika Bagri
-//24 March 2026
+//26 April 2026
 
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthToken } from '../types';
-
-function parseUsername(token: string): string | null {
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.username ?? payload.sub ?? null;
-  } catch {
-    return null;
-  }
-}
 
 export interface AuthState {
   token: string | null;
@@ -20,6 +11,7 @@ export interface AuthState {
   email: string | null;
   hydrated: boolean;
   error: string | null;
+  setUsername: (username: string) => void;
   setToken: (token: AuthToken) => Promise<void>;
   clearToken: () => Promise<void>;
   loadToken: () => Promise<void>;
@@ -36,8 +28,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   error: null,
 
   setToken: async (auth: AuthToken) => {
-    await AsyncStorage.setItem('access_token', auth.access_token);
-    set({ token: auth.access_token, username: parseUsername(auth.access_token), email:null});
+    //await AsyncStorage.multiRemove(['access_token', 'saved_username']);
+    const tokenToSave = auth.access_token;
+    if (!tokenToSave) {
+      console.error("Auth Error: No access_token found in the object provided to setToken");
+      return;
+    }
+    await AsyncStorage.setItem('access_token', tokenToSave);
+    set({ token: tokenToSave, hydrated: true, email: null }); 
   },
 
   clearToken: async () => {
@@ -47,12 +45,18 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   loadToken: async () => {
     const token = await AsyncStorage.getItem('access_token');
-    set({ token, username: token ? parseUsername(token) : null, hydrated: true });
+    const savedUsername = await AsyncStorage.getItem('saved_username');
+    set({ token, username: savedUsername, hydrated: true});
   },
 
   clearError: () => set({ error: null }),
 
   setError: (msg: string) => set({ error: msg }),
+
+  setUsername: (username: string) => {
+    AsyncStorage.setItem('saved_username', username);
+    set({ username: username });
+  },
 
   setEmail: (email: string) => set({ email: email })
 }));

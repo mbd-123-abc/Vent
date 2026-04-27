@@ -30,9 +30,20 @@ export default function VerificationScreen(){
         const setError   = useAuthStore((s: AuthState) => s.setError);
         const [loading, setLoading] = useState(false);
         const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+        const [timer, setTimer] = useState(0);
 
     const [code, setCode] = useState('');
-    
+        
+    useEffect(() => {
+        let interval: ReturnType<typeof setInterval>;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [timer]);
+
     const validate = (): boolean => {
         const errs: Record<string, string> = {};
         if (!(/^\d+$/.test(code))||code.length !== 6) errs.code = 'Verification code must be 6 digits.';
@@ -42,11 +53,12 @@ export default function VerificationScreen(){
 
     const handleResend = async () => {
         clearError();
-        if (!validate()) return;
         setLoading(true);
         let success = false;
         try {
-            const { data } = await api.post('/auth/resend', {email,code});
+            const { data } = await api.post('/auth/resend', {email: email});
+            setTimer(900);
+            alert("A new code has been sent!");
             success = true;
         } catch (err: any){
             console.error('Raw Verification Error:', err.message);
@@ -70,7 +82,7 @@ export default function VerificationScreen(){
         setLoading(true);
         let success = false;
         try {
-            const { data } = await api.post('/auth/verify', {email,code});
+            const { data } = await api.post('/auth/verify', {email: email,verificationCode: code});
             success = true;
         } catch (err: any){
             console.error('Raw Verification Error:', err.message);
@@ -107,7 +119,7 @@ export default function VerificationScreen(){
                         secureTextEntry
                     />
 {error &&           <Text style={styles.errorBox}>{error}</Text>}
-                    <TouchableOpacity style={styles.btn} onPress={handleCode} disabled={loading} accessibilityRole="button">
+                    <TouchableOpacity style={styles.btn} onPress={handleCode} disabled={timer > 0} accessibilityRole="button">
                         {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>Verify</Text>}
                     </TouchableOpacity>
 
