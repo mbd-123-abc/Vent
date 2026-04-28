@@ -1,5 +1,5 @@
 //Mahika Bagri 
-//20 April 2026
+//27 April 2026
 
 package com.example.app.models;
 import java.time.LocalDateTime;
@@ -19,7 +19,6 @@ import lombok.Setter;
 @Table(name = "user_auth")
 @Getter
 @Setter
-
 public class user implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,15 +48,48 @@ public class user implements UserDetails{
     @Column(name = "banned")
     private boolean banned;
 
+    @Column(name = "Bio", columnDefinition = "TEXT")
+    private String bio;
+
+    @Column(name = "chatType")
+    @com.fasterxml.jackson.annotation.JsonProperty("chat_type")
+    private String chatType;
+
+    @Column(name = "rolePreference")
+    @com.fasterxml.jackson.annotation.JsonProperty("role_preference")
+    private String rolePreference;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "color")
+    private String color;
+
+@Column(name = "Moods")
+    @jakarta.persistence.ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
+    @jakarta.persistence.CollectionTable(
+        name = "user_moods", 
+        joinColumns = @jakarta.persistence.JoinColumn(name = "user_id")
+    )
+    private java.util.Set<String> moods = new java.util.HashSet<>();
+    
+    @Column(name = "Topics")
+    @jakarta.persistence.ElementCollection(fetch = jakarta.persistence.FetchType.EAGER)
+    @jakarta.persistence.CollectionTable(
+        name = "user_topics", 
+        joinColumns = @jakarta.persistence.JoinColumn(name = "user_id")
+    )
+    private java.util.Set<String> topics = new java.util.HashSet<>();
+
+    public user(){
+        //
+    }
+
     public user(String name, String username, String email, String password){
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public user(){
-        //
     }
 
     @Override

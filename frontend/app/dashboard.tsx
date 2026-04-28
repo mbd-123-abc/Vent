@@ -20,8 +20,8 @@ export default function DashboardScreen() {
     const router = useRouter();
 
     const mockUser = {
-        bio: "Passionate about campus sustainability and finding the best vegetarian pho in Seattle. UW Senior.",
-        tags: ['Vegetarian','Senior','Sustainability']
+        bio: "Dealing with stuff.",
+        tags: ['Converse','Poet','Funny','Identity','Relationship']
     };
 
     useEffect(() => {
@@ -40,11 +40,19 @@ export default function DashboardScreen() {
           resizeMode="cover"
         >
             <SafeAreaView style={styles.container}>
-                <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : 'padding'} style={{ flex: 1, justifyContent: 'center' }}>
-                
-                    <Text style={styles.title}>Welcome, {username}!</Text>
 
-                    <Text style={styles.subtitle}>Top Matches</Text>
+                  <View style={styles.topBar}>
+                    <TouchableOpacity onPress={() => router.push('/profile')} accessibilityRole="button">
+                      <Text style={styles.profileBtn}>Profile</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => router.push('/settings')} accessibilityRole="button">
+                      <Text style={styles.profileBtn}>Settings</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : 'padding'} style={{ flex: 1, justifyContent: 'center' }}>
+                  
+                    <Text style={styles.title}>Welcome, {username}!</Text>
                     <View style={styles.ghostCard}></View>
                     <MatchCard user={mockUser} />
 
@@ -58,16 +66,11 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 24 },
-  title:     { color: '#fff', fontSize: 20, fontWeight: '700', marginTop: 50, marginBottom: 30, textAlign: 'center' },
-  subtitle:     { color: '#fff', fontSize: 15, fontWeight: '500'},
-  btn: {
-    backgroundColor: '#3d71b4', borderRadius: 10, padding: 16,
-    alignItems: 'center', marginBottom: 16,
-  },
-  btnText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  title:     { color: '#fff', fontSize: 22, fontWeight: '700', marginTop: 40, marginBottom: 5, textAlign: 'center' },
+  subtitle:     { color: '#ffffff', fontSize: 15, fontWeight: '300', textAlign: 'center'},
   ghostCard: {
-    width: '70%',
-    height: 400,
+    width: '90%',
+    height: 500,
     borderRadius: 20,
 
     backgroundColor: 'rgba(255, 255, 255, 0.85)',    
@@ -75,8 +78,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 0,
-    marginLeft: 50,
+    marginLeft: 15,    
+    marginTop: -10,
     position:'absolute',
 
   },
+  topBar:     { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 0, paddingVertical: 0 },
+  profileBtn: { color: '#5dea4a', fontSize: 15, fontWeight: '600' },
 });

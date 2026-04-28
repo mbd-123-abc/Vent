@@ -52,7 +52,6 @@ const MatchCard: React.FC<MatchCardProps> = ({ user }) => {
     })
   ).current;
 
-  // 3. Setup Rotation based on horizontal movement
   const rotate = pan.x.interpolate({
     inputRange: [-width / 2, 0, width / 2],
     outputRange: ['-10deg', '0deg', '10deg'],
@@ -97,8 +96,8 @@ const styles = StyleSheet.create<Styles>({
     alignItems: 'center',
   },
   card: {
-    width: '70%',
-    height: 400, 
+    width: '90%',
+    height: 500,
     borderRadius: 20,
     
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
@@ -112,7 +111,7 @@ const styles = StyleSheet.create<Styles>({
     justifyContent: 'center',
     alignItems: 'center',
 
-    marginTop: -130,
+    marginTop: -90,
   },
   cardInner: {
     padding: 20,
@@ -120,7 +119,7 @@ const styles = StyleSheet.create<Styles>({
   },
   tags: {
     fontSize: 15,
-    color: '#000000', 
+    color: '#8730de', 
     fontWeight: 'bold',
     textAlign: 'center',
   },
